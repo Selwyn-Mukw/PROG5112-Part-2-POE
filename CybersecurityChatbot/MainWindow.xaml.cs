@@ -1,14 +1,6 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System;
 using System.Media;
+using System.Windows;
 
 namespace CybersecurityChatbot
 {
@@ -21,14 +13,22 @@ namespace CybersecurityChatbot
         {
             InitializeComponent();
 
-            // Sound
-            SoundPlayer player = new SoundPlayer();
-            player.SoundLocation = @"C:\Users\mukwe\source\repos\CybersecurityChatbot\CybersecurityChatbot\CyberGreeting.wav";
-            player.Play();
+            // Play Sound
+            try
+            {
+                SoundPlayer player = new SoundPlayer();
+                player.SoundLocation = @"C:\Users\mukwe\source\repos\CybersecurityChatbot\CybersecurityChatbot\CyberGreeting.wav";
+                player.Load();
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Sound could not play: " + ex.Message);
+            }
 
             // ASCII Art
             AsciiArt.Text =
-        @"███████╗ █████╗ ███████╗███████╗████████╗██╗   ██╗
+@"███████╗ █████╗ ███████╗███████╗████████╗██╗   ██╗
 ██╔════╝██╔══██╗██╔════╝██╔════╝╚══██╔══╝╚██╗ ██╔╝
 ███████╗███████║█████╗  █████╗     ██║    ╚████╔╝
 ╚════██║██╔══██║██╔══╝  ██╔══╝     ██║     ╚██╔╝
@@ -43,15 +43,26 @@ namespace CybersecurityChatbot
 ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝";
         }
 
-
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string userMessage = UserInput.Text;
 
-            ChatDisplay.Text += "\nYou: " + userMessage;
+            // Ignore empty messages
+            if (string.IsNullOrWhiteSpace(userMessage))
+            {
+                return;
+            }
 
-            ChatDisplay.Text += "\nBot: Stay safe online!";
+            // Show user message
+            ChatHistory.AppendText("\nYou: " + userMessage);
 
+            // Bot response
+            ChatHistory.AppendText("\nBot: Stay safe online!\n");
+
+            // Auto-scroll
+            ChatHistory.ScrollToEnd();
+
+            // Clear input box
             UserInput.Clear();
         }
     }

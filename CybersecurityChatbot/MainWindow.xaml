@@ -9,13 +9,14 @@
 
     <Grid Margin="10">
 
+        <!-- ROWS -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
+        <!-- ================= HEADER ================= -->
         <StackPanel Grid.Row="0">
 
             <!-- ASCII LOGO -->
@@ -28,6 +29,7 @@
 
                 <ScrollViewer HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Disabled">
+
                     <TextBox x:Name="AsciiArt"
                              FontFamily="Consolas"
                              FontSize="7"
@@ -51,49 +53,70 @@
                        Margin="0,5,0,10"/>
         </StackPanel>
 
-        <!-- CHAT DISPLAY -->
+        <!-- ================= CHAT HISTORY AREA ================= -->
         <Border Grid.Row="1"
-                Background="#2D2D30"
+                Background="#252526"
                 CornerRadius="10"
                 Padding="10"
-                Margin="0,10,0,10">
+                Margin="0,10,0,10"
+                BorderBrush="Lime"
+                BorderThickness="1">
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <TextBlock x:Name="ChatDisplay"
-                           Foreground="White"
-                           FontSize="16"
-                           TextWrapping="Wrap"/>
-            </ScrollViewer>
+            <!-- Scrollable Read-Only Chat Area -->
+            <RichTextBox x:Name="ChatHistory"
+                         Background="#252526"
+                         Foreground="White"
+                         FontFamily="Consolas"
+                         FontSize="15"
+                         IsReadOnly="True"
+                         BorderThickness="0"
+                         VerticalScrollBarVisibility="Auto"/>
         </Border>
 
-        <!-- INPUT AREA -->
-        <Grid Grid.Row="2">
+        <!-- ================= INPUT AREA ================= -->
+        <Grid Grid.Row="2"
+              Margin="0,5,0,0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="140"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="UserInput"
-                     Grid.Column="0"
-                     Height="40"
-                     FontSize="16"
-                     Background="#3C3C3C"
-                     Foreground="White"
-                     BorderBrush="Lime"
-                     CaretBrush="Lime"
-                     Margin="0,0,10,0"/>
+            <!-- USER INPUT -->
+            <Border Grid.Column="0"
+                    Background="#3C3C3C"
+                    CornerRadius="8"
+                    BorderBrush="Lime"
+                    BorderThickness="1"
+                    Margin="0,0,10,0">
 
+                <TextBox x:Name="UserInput"
+                         FontSize="16"
+                         FontFamily="Consolas"
+                         Foreground="White"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="10"
+                         CaretBrush="Lime"
+                         VerticalContentAlignment="Center"
+                         Height="45"/>
+            </Border>
+
+            <!-- SEND BUTTON -->
             <Button x:Name="SendButton"
                     Grid.Column="1"
-                    Content="Send"
+                    Content="SEND"
                     FontSize="16"
                     FontWeight="Bold"
+                    FontFamily="Consolas"
                     Background="Lime"
                     Foreground="Black"
                     BorderThickness="0"
+                    Height="45"
+                    Cursor="Hand"
                     Click="SendButton_Click"/>
         </Grid>
 
     </Grid>
+ 
 </Window>
