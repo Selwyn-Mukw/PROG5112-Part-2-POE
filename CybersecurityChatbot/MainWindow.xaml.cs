@@ -9,11 +9,17 @@ namespace CybersecurityChatbot
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Create responder object
+        private KeywordResponder responder;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // Play Sound
+            // Initialize keyword responder
+            responder = new KeywordResponder();
+
+            // Play greeting sound
             try
             {
                 SoundPlayer player = new SoundPlayer();
@@ -53,13 +59,16 @@ namespace CybersecurityChatbot
                 return;
             }
 
-            // Show user message
+            // Display user message
             ChatHistory.AppendText("\nYou: " + userMessage);
 
-            // Bot response
-            ChatHistory.AppendText("\nBot: Stay safe online!\n");
+            // Get chatbot response
+            string botResponse = responder.GetResponse(userMessage);
 
-            // Auto-scroll
+            // Display bot response
+            ChatHistory.AppendText("\nBot: " + botResponse + "\n");
+
+            // Auto-scroll to latest message
             ChatHistory.ScrollToEnd();
 
             // Clear input box
