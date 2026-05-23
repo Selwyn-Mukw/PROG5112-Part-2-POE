@@ -7,32 +7,109 @@ namespace CybersecurityChatbot
         // Store user's name
         private string userName = "";
 
-        // Check if chatbot already asked for name
+        // Conversation stages
         private bool nameCaptured = false;
+        private bool askedHowAreYou = false;
+        private bool conversationStarted = false;
 
         public string GetResponse(string userMessage)
         {
-            // FIRST TIME → Capture Name
+            string message = userMessage.ToLower();
+
+            // ===================== STAGE 1 =====================
+            // Capture User Name
+
             if (!nameCaptured)
             {
                 userName = userMessage;
 
                 nameCaptured = true;
+                askedHowAreYou = true;
 
-                return $"Hello {userName}! Welcome to the Cyber Security Hub.\n\n" +
-                       "You can ask me about:\n" +
-                       "- Cyber Security\n" +
-                       "- Phishing\n" +
-                       "- Malware\n" +
-                       "- Ransomware\n" +
-                       "- Firewalls\n" +
-                       "- VPNs\n" +
-                       "- Password Safety\n" +
-                       "- Two-Factor Authentication\n" +
-                       "- Personal Data Protection";
+                return $"Hello {userName}! How are you today?";
             }
 
-            string message = userMessage.ToLower();
+            // ===================== STAGE 2 =====================
+            // User responds to "How are you?"
+
+            if (askedHowAreYou && !conversationStarted)
+            {
+                conversationStarted = true;
+
+                // SAD / NEGATIVE RESPONSES
+                if (message.Contains("sad") ||
+                    message.Contains("depressed") ||
+                    message.Contains("upset") ||
+                    message.Contains("stressed") ||
+                    message.Contains("bad") ||
+                    message.Contains("not okay"))
+                {
+                    return $"I am sorry to hear that {userName}. " +
+                           $"Remember that difficult moments do not last forever.\n\n" +
+
+                           "Sometimes online dangers like scams, cyberbullying, and hacked accounts can also affect people emotionally.\n\n" +
+
+                           "I am here to help you stay safe online while also teaching you more about cybersecurity.\n\n" +
+
+                           "Here are some topics we can explore together:\n\n" +
+
+                           "- Cyber Security\n" +
+                           "- Phishing\n" +
+                           "- Malware\n" +
+                           "- Ransomware\n" +
+                           "- Firewalls\n" +
+                           "- VPNs\n" +
+                           "- Password Safety\n" +
+                           "- Two-Factor Authentication\n" +
+                           "- Personal Data Protection";
+                }
+
+                // HAPPY / POSITIVE RESPONSES
+                else if (message.Contains("good") ||
+                         message.Contains("great") ||
+                         message.Contains("happy") ||
+                         message.Contains("fine") ||
+                         message.Contains("awesome"))
+                {
+                    return $"That is wonderful to hear {userName}!\n\n" +
+
+                           "I am here to assist you with cybersecurity safety and awareness.\n\n" +
+
+                           "Here are some cybersecurity topics you can ask me about:\n\n" +
+
+                           "- Cyber Security\n" +
+                           "- Phishing\n" +
+                           "- Malware\n" +
+                           "- Ransomware\n" +
+                           "- Firewalls\n" +
+                           "- VPNs\n" +
+                           "- Password Safety\n" +
+                           "- Two-Factor Authentication\n" +
+                           "- Personal Data Protection";
+                }
+
+                // DEFAULT RESPONSE
+                else
+                {
+                    return $"Thank you for sharing {userName}.\n\n" +
+
+                           "I am here to help you learn about cybersecurity and online safety.\n\n" +
+
+                           "Here are some topics you can ask me about:\n\n" +
+
+                           "- Cyber Security\n" +
+                           "- Phishing\n" +
+                           "- Malware\n" +
+                           "- Ransomware\n" +
+                           "- Firewalls\n" +
+                           "- VPNs\n" +
+                           "- Password Safety\n" +
+                           "- Two-Factor Authentication\n" +
+                           "- Personal Data Protection";
+                }
+            }
+
+            // ===================== CHATBOT RESPONSES =====================
 
             // Greetings
             if (message == "hello" ||
