@@ -47,6 +47,18 @@ namespace CybersecurityChatbot
 ██╔══╝  ██║██╔══██╗╚════██║   ██║
 ██║     ██║██║  ██║███████║   ██║
 ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝";
+
+
+            ChatHistory.AppendText(
+        "Bot: Welcome to the Cyber Security Hub!\n" +
+        "You can ask me about:\n" +
+        "- Phishing\n" +
+        "- Malware\n" +
+        "- VPNs\n" +
+        "- Passwords\n" +
+        "- Firewalls\n" +
+        "- Privacy\n\n");
+
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)

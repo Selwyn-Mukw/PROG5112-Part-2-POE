@@ -1,81 +1,103 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CybersecurityChatbot
 {
     public class KeywordResponder
     {
-        private Dictionary<string, List<string>> _responses;
-        private Random _random = new Random();
-
-        public KeywordResponder()
+        public string GetResponse(string userMessage)
         {
-            _responses = new Dictionary<string, List<string>>()
+            string message = userMessage.ToLower();
+
+            // Greetings
+            if (message.Contains("hello") ||
+                message.Contains("hi") ||
+                message.Contains("hey"))
             {
-                {
-                    "password",
-                    new List<string>()
-                    {
-                        "Use strong passwords with symbols and numbers.",
-                        "Avoid using personal information in passwords."
-                    }
-                },
-
-                {
-                    "phishing",
-                    new List<string>()
-                    {
-                        "Do not click suspicious email links.",
-                        "Always verify who sent the email."
-                    }
-                },
-
-                {
-                    "privacy",
-                    new List<string>()
-                    {
-                        "Review your privacy settings regularly.",
-                        "Avoid sharing sensitive information online."
-                    }
-                },
-
-                {
-                    "scam",
-                    new List<string>()
-                    {
-                        "Be careful of offers that seem too good to be true.",
-                        "Never send money to strangers online."
-                    }
-                },
-
-                {
-                    "malware",
-                    new List<string>()
-                    {
-                        "Install trusted antivirus software.",
-                        "Keep your computer updated."
-                    }
-                }
-            };
-        }
-
-        public string GetResponse(string input)
-        {
-            input = input.ToLower();
-
-            foreach (var keyword in _responses.Keys)
-            {
-                if (input.Contains(keyword))
-                {
-                    List<string> possibleResponses = _responses[keyword];
-
-                    int index = _random.Next(possibleResponses.Count);
-
-                    return possibleResponses[index];
-                }
+                return "Hello! Welcome to the Cyber Security Hub. Ask me anything about cybersecurity.";
             }
 
-            return "I can help with passwords, phishing, privacy, scams, and malware.";
+            // Cyber Security
+            else if (message.Contains("cyber security") ||
+                     message.Contains("cybersecurity"))
+            {
+                return "Cyber security is the practice of protecting computers, networks, and data from unauthorized access or attacks.";
+            }
+
+            // Phishing
+            else if (message.Contains("phishing"))
+            {
+                return "Phishing is a cyber attack that tricks people into revealing sensitive information like passwords or credit card details.";
+            }
+
+            // Malware
+            else if (message.Contains("malware"))
+            {
+                return "Malware is harmful software designed to damage or exploit devices and networks.";
+            }
+
+            // Ransomware
+            else if (message.Contains("ransomware"))
+            {
+                return "Ransomware encrypts files and demands payment to restore access.";
+            }
+
+            // Firewall
+            else if (message.Contains("firewall"))
+            {
+                return "A firewall monitors and controls incoming and outgoing network traffic.";
+            }
+
+            // VPN
+            else if (message.Contains("vpn"))
+            {
+                return "A VPN creates a secure encrypted connection over the internet.";
+            }
+
+            // Passwords
+            else if (message.Contains("password"))
+            {
+                return "A strong password should contain uppercase letters, lowercase letters, numbers, and symbols and be at least 12 characters long.";
+            }
+
+            // Two-Factor Authentication
+            else if (message.Contains("two-factor") ||
+                     message.Contains("2fa") ||
+                     message.Contains("authentication"))
+            {
+                return "Two-factor authentication adds extra security by requiring another verification method.";
+            }
+
+            // Personal Data
+            else if (message.Contains("personal data") ||
+                     message.Contains("privacy"))
+            {
+                return "Protect your personal data by using privacy settings and avoiding suspicious links.";
+            }
+
+            // Cyber Attacks
+            else if (message.Contains("cyber attack") ||
+                     message.Contains("protect"))
+            {
+                return "To protect yourself online, keep software updated, avoid suspicious links, and use antivirus software.";
+            }
+
+            // Thanks
+            else if (message.Contains("thank"))
+            {
+                return "You are welcome! Stay safe online.";
+            }
+
+            // Goodbye
+            else if (message.Contains("bye"))
+            {
+                return "Goodbye! Stay safe online.";
+            }
+
+            // Default Response
+            else
+            {
+                return "Sorry, I don't understand that yet. Please ask a cybersecurity-related question.";
+            }
         }
     }
 }
