@@ -4,16 +4,42 @@ namespace CybersecurityChatbot
 {
     public class KeywordResponder
     {
+        // Store user's name
+        private string userName = "";
+
+        // Check if chatbot already asked for name
+        private bool nameCaptured = false;
+
         public string GetResponse(string userMessage)
         {
+            // FIRST TIME → Capture Name
+            if (!nameCaptured)
+            {
+                userName = userMessage;
+
+                nameCaptured = true;
+
+                return $"Hello {userName}! Welcome to the Cyber Security Hub.\n\n" +
+                       "You can ask me about:\n" +
+                       "- Cyber Security\n" +
+                       "- Phishing\n" +
+                       "- Malware\n" +
+                       "- Ransomware\n" +
+                       "- Firewalls\n" +
+                       "- VPNs\n" +
+                       "- Password Safety\n" +
+                       "- Two-Factor Authentication\n" +
+                       "- Personal Data Protection";
+            }
+
             string message = userMessage.ToLower();
 
             // Greetings
-            if (message.Contains("hello") ||
-                message.Contains("hi") ||
-                message.Contains("hey"))
+            if (message == "hello" ||
+                message == "hi" ||
+                message == "hey")
             {
-                return "Hello! Welcome to the Cyber Security Hub. Ask me anything about cybersecurity.";
+                return $"Hello {userName}! How can I help you today?";
             }
 
             // Cyber Security
@@ -84,16 +110,16 @@ namespace CybersecurityChatbot
             // Thanks
             else if (message.Contains("thank"))
             {
-                return "You are welcome! Stay safe online.";
+                return $"You are welcome {userName}! Stay safe online.";
             }
 
             // Goodbye
             else if (message.Contains("bye"))
             {
-                return "Goodbye! Stay safe online.";
+                return $"Goodbye {userName}! Stay safe online.";
             }
 
-            // Default Response
+            // Default
             else
             {
                 return "Sorry, I don't understand that yet. Please ask a cybersecurity-related question.";
