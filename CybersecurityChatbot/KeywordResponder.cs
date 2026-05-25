@@ -5,7 +5,7 @@ namespace CybersecurityChatbot
     public class KeywordResponder
     {
         // Store user's name
-        private string userName = "";
+        private string userName;
 
         // Conversation stages
         private bool nameCaptured = false;
@@ -15,11 +15,14 @@ namespace CybersecurityChatbot
         // Sentiment detector object
         private SentimentDetector detector = new SentimentDetector();
 
+        // Memory storage object
+        private MemoryStore memory = new MemoryStore();
+
         // ===================== MENU METHOD =====================
 
         private string GetMenu()
         {
-            return "\n\nHere are some cybersecurity topics you can ask me about.Please type the word which you would like to learn about :\n\n" +
+            return "\n\nHere are some cybersecurity topics you can ask me about. Please type the topic you would like to learn about:\n\n" +
 
                    "1- Cyber Security\n" +
                    "2- Phishing\n" +
@@ -34,22 +37,39 @@ namespace CybersecurityChatbot
                    "Press 0 to exit the application.";
         }
 
+        // ===================== CONSTRUCTOR =====================
+
+        public KeywordResponder()
+        {
+            // Load saved favourite topic only
+            memory.FavouriteTopic =
+                memory.Recall("FavouriteTopic");
+        }
+
+        // ===================== RETURN SAVED USER =====================
+
+        public string GetSavedUserName()
+        {
+            return userName;
+        }
+
         // ===================== CHATBOT =====================
 
         public string GetResponse(string userMessage)
         {
             string message = userMessage.ToLower();
 
-            // Exit application
+            // ===================== EXIT APPLICATION =====================
+
             if (message == "0")
             {
                 Environment.Exit(0);
             }
 
-            // Detect sentiment
+            // ===================== DETECT SENTIMENT =====================
+
             Sentiment sentiment = detector.Detect(message);
 
-            // Emotional response
             string emotionalResponse =
                 detector.GetSentimentResponse(sentiment, userName);
 
@@ -59,6 +79,32 @@ namespace CybersecurityChatbot
             if (!nameCaptured)
             {
                 userName = userMessage;
+
+                // Check if returning user
+                string savedName = memory.Recall("UserName");
+
+                if (!string.IsNullOrEmpty(savedName) &&
+                    savedName.ToLower() == userName.ToLower())
+                {
+                    // Restore previous user
+                    memory.UserName = savedName;
+
+                    nameCaptured = true;
+                    conversationStarted = true;
+
+                    return $"Welcome back {userName}! " +
+
+                           memory.GetPersonalisedOpener() +
+
+                           "ready to continue learning about cybersecurity?"
+
+                           + GetMenu();
+                }
+
+                // ===================== NEW USER =====================
+
+                memory.UserName = userName;
+                memory.Store("UserName", userName);
 
                 nameCaptured = true;
                 askedHowAreYou = true;
@@ -76,6 +122,47 @@ namespace CybersecurityChatbot
                 return emotionalResponse + GetMenu();
             }
 
+            // ===================== STORE FAVOURITE TOPIC =====================
+
+            if (message.Contains("interested in"))
+            {
+                if (message.Contains("privacy"))
+                {
+                    memory.FavouriteTopic = "privacy";
+                    memory.Store("FavouriteTopic", "privacy");
+
+                    return $"Great choice {userName}! I will remember that you are interested in privacy."
+                           + GetMenu();
+                }
+
+                else if (message.Contains("phishing"))
+                {
+                    memory.FavouriteTopic = "phishing";
+                    memory.Store("FavouriteTopic", "phishing");
+
+                    return $"Great choice {userName}! I will remember that you are interested in phishing."
+                           + GetMenu();
+                }
+
+                else if (message.Contains("malware"))
+                {
+                    memory.FavouriteTopic = "malware";
+                    memory.Store("FavouriteTopic", "malware");
+
+                    return $"Great choice {userName}! I will remember that you are interested in malware."
+                           + GetMenu();
+                }
+
+                else if (message.Contains("vpn"))
+                {
+                    memory.FavouriteTopic = "VPNs";
+                    memory.Store("FavouriteTopic", "VPNs");
+
+                    return $"Great choice {userName}! I will remember that you are interested in VPNs."
+                           + GetMenu();
+                }
+            }
+
             // ===================== CHATBOT RESPONSES =====================
 
             // Greetings
@@ -91,49 +178,70 @@ namespace CybersecurityChatbot
             else if (message.Contains("cyber security") ||
                      message.Contains("cybersecurity"))
             {
-                return "Cyber security is the practice of protecting computers, networks, and data from unauthorized access or attacks."
+                return memory.GetPersonalisedOpener() +
+
+                       "Cyber security is the practice of protecting computers, networks, and data from unauthorized access or attacks."
+
                        + GetMenu();
             }
 
             // Phishing
             else if (message.Contains("phishing"))
             {
-                return "Phishing is a cyber attack that tricks people into revealing sensitive information like passwords or banking details."
+                return memory.GetPersonalisedOpener() +
+
+                       "Phishing is a cyber attack that tricks people into revealing sensitive information like passwords or banking details."
+
                        + GetMenu();
             }
 
             // Malware
             else if (message.Contains("malware"))
             {
-                return "Malware is harmful software designed to damage or exploit devices and networks."
+                return memory.GetPersonalisedOpener() +
+
+                       "Malware is harmful software designed to damage or exploit devices and networks."
+
                        + GetMenu();
             }
 
             // Ransomware
             else if (message.Contains("ransomware"))
             {
-                return "Ransomware encrypts files and demands payment to restore access."
+                return memory.GetPersonalisedOpener() +
+
+                       "Ransomware encrypts files and demands payment to restore access."
+
                        + GetMenu();
             }
 
             // Firewall
             else if (message.Contains("firewall"))
             {
-                return "A firewall monitors and controls incoming and outgoing network traffic."
+                return memory.GetPersonalisedOpener() +
+
+                       "A firewall monitors and controls incoming and outgoing network traffic."
+
                        + GetMenu();
             }
 
             // VPN
             else if (message.Contains("vpn"))
             {
-                return "A VPN creates a secure encrypted connection over the internet."
+                return memory.GetPersonalisedOpener() +
+
+                       "A VPN creates a secure encrypted connection over the internet."
+
                        + GetMenu();
             }
 
             // Passwords
             else if (message.Contains("password"))
             {
-                return "A strong password should include uppercase letters, lowercase letters, numbers, and symbols."
+                return memory.GetPersonalisedOpener() +
+
+                       "A strong password should include uppercase letters, lowercase letters, numbers, and symbols."
+
                        + GetMenu();
             }
 
@@ -141,7 +249,10 @@ namespace CybersecurityChatbot
             else if (message.Contains("two-factor") ||
                      message.Contains("2fa"))
             {
-                return "Two-factor authentication adds extra security by requiring another verification step."
+                return memory.GetPersonalisedOpener() +
+
+                       "Two-factor authentication adds extra security by requiring another verification step."
+
                        + GetMenu();
             }
 
@@ -149,7 +260,10 @@ namespace CybersecurityChatbot
             else if (message.Contains("privacy") ||
                      message.Contains("personal data"))
             {
-                return "Protect your personal data by avoiding suspicious links and using privacy settings."
+                return memory.GetPersonalisedOpener() +
+
+                       "Protect your personal data by avoiding suspicious links and using privacy settings."
+
                        + GetMenu();
             }
 

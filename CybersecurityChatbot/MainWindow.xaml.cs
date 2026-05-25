@@ -50,17 +50,18 @@ namespace CybersecurityChatbot
 ██║     ██║██║  ██║███████║   ██║
 ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝";
 
-            //welcome message for the user
+            // ===================== WELCOME MESSAGE =====================
+
             Paragraph welcomeParagraph = new Paragraph();
             welcomeParagraph.Foreground = Brushes.White;
 
+            // Returning user
             welcomeParagraph.Inlines.Add(
-                new Run(
-                    "Bot: Welcome to the Cyber Security Hub!\n" +
-                    "Bot: What is your name?\n"));
+    new Run(
+        "Bot: Welcome to the Cyber Security Hub!\n" +
+        "Bot: What is your name?\n"));
 
             ChatHistory.Document.Blocks.Add(welcomeParagraph);
-
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -73,23 +74,30 @@ namespace CybersecurityChatbot
                 return;
             }
 
-            // USER MESSAGE
+            // ===================== USER MESSAGE =====================
+
             Paragraph userParagraph = new Paragraph();
             userParagraph.Foreground = Brushes.Lime;
-            userParagraph.Inlines.Add(new Run("You: " + userMessage));
+
+            userParagraph.Inlines.Add(
+                new Run("You: " + userMessage));
 
             ChatHistory.Document.Blocks.Add(userParagraph);
 
-            // BOT RESPONSE
-            string botResponse = responder.GetResponse(userMessage);
+            // ===================== BOT RESPONSE =====================
+
+            string botResponse =
+                responder.GetResponse(userMessage);
 
             Paragraph botParagraph = new Paragraph();
             botParagraph.Foreground = Brushes.White;
-            botParagraph.Inlines.Add(new Run("Bot: " + botResponse));
+
+            botParagraph.Inlines.Add(
+                new Run("Bot: " + botResponse));
 
             ChatHistory.Document.Blocks.Add(botParagraph);
 
-            // Scroll automatically
+            // Auto-scroll
             ChatHistory.ScrollToEnd();
 
             // Clear input
