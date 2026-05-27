@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CybersecurityChatbot
 {
@@ -12,11 +13,121 @@ namespace CybersecurityChatbot
         private bool askedHowAreYou = false;
         private bool conversationStarted = false;
 
+        // Random object
+        private Random random = new Random();
+
         // Sentiment detector object
         private SentimentDetector detector = new SentimentDetector();
 
         // Memory storage object
         private MemoryStore memory = new MemoryStore();
+
+        // ===================== RANDOM RESPONSES =====================
+
+        private Dictionary<string, string[]> responses =
+            new Dictionary<string, string[]>()
+        {
+            {
+                "cybersecurity",
+                new string[]
+                {
+                    "Cyber security protects computers, networks, and data from cyber attacks.",
+                    "Cyber security involves keeping systems safe from hackers and malicious software.",
+                    "Cyber security focuses on protecting digital information and online systems."
+                }
+            },
+
+            {
+                "phishing",
+                new string[]
+                {
+                    "Phishing tricks users into giving away sensitive information through fake emails or websites.",
+                    "Phishing attacks often pretend to be trusted companies to steal passwords or banking details.",
+                    "Be careful of suspicious links because phishing scams are designed to steal personal information."
+                }
+            },
+
+            {
+                "malware",
+                new string[]
+                {
+                    "Malware is harmful software created to damage or exploit devices.",
+                    "Viruses, worms, and trojans are all examples of malware.",
+                    "Malware can steal data, slow down computers, or give hackers access to your system."
+                }
+            },
+
+            {
+                "ransomware",
+                new string[]
+                {
+                    "Ransomware locks or encrypts files until money is paid to attackers.",
+                    "A ransomware attack can prevent users from accessing important data.",
+                    "Always back up important files to protect yourself from ransomware attacks."
+                }
+            },
+
+            {
+                "firewall",
+                new string[]
+                {
+                    "A firewall filters incoming and outgoing network traffic for security.",
+                    "Firewalls help block unauthorized access to devices and networks.",
+                    "Using a firewall adds an extra layer of protection against cyber threats."
+                }
+            },
+
+            {
+                "vpn",
+                new string[]
+                {
+                    "A VPN encrypts your internet connection for better privacy.",
+                    "VPNs help protect your data when using public Wi-Fi.",
+                    "Using a VPN can hide your IP address and improve online security."
+                }
+            },
+
+            {
+                "password",
+                new string[]
+                {
+                    "Strong passwords should contain letters, numbers, and symbols.",
+                    "Avoid using easy passwords like your name or birthdate.",
+                    "Using unique passwords for every account improves security."
+                }
+            },
+
+            {
+                "2fa",
+                new string[]
+                {
+                    "Two-factor authentication adds an extra verification step during login.",
+                    "2FA improves account security by requiring a second form of authentication.",
+                    "Even if a password is stolen, 2FA can help prevent unauthorized access."
+                }
+            },
+
+            {
+                "privacy",
+                new string[]
+                {
+                    "Protect your personal data by avoiding suspicious links and websites.",
+                    "Privacy settings can help control who sees your personal information online.",
+                    "Never share sensitive information on unsecured websites."
+                }
+            }
+        };
+
+        // ===================== RANDOM RESPONSE METHOD =====================
+
+        private string GetRandomResponse(string category)
+        {
+            string[] categoryResponses = responses[category];
+
+            int index = random.Next(categoryResponses.Length);
+
+            return categoryResponses[index];
+        }
 
         // ===================== MENU METHOD =====================
 
@@ -41,7 +152,6 @@ namespace CybersecurityChatbot
 
         public KeywordResponder()
         {
-            // Load saved favourite topic only
             memory.FavouriteTopic =
                 memory.Recall("FavouriteTopic");
         }
@@ -59,49 +169,38 @@ namespace CybersecurityChatbot
         {
             string message = userMessage.ToLower();
 
-            // ===================== EXIT APPLICATION =====================
-
+            // Exit
             if (message == "0")
             {
                 Environment.Exit(0);
             }
 
-            // ===================== DETECT SENTIMENT =====================
-
+            // Sentiment
             Sentiment sentiment = detector.Detect(message);
 
             string emotionalResponse =
                 detector.GetSentimentResponse(sentiment, userName);
 
-            // ===================== STAGE 1 =====================
-            // Capture user name
-
+            // Capture Name
             if (!nameCaptured)
             {
                 userName = userMessage;
 
-                // Check if returning user
                 string savedName = memory.Recall("UserName");
 
                 if (!string.IsNullOrEmpty(savedName) &&
                     savedName.ToLower() == userName.ToLower())
                 {
-                    // Restore previous user
                     memory.UserName = savedName;
 
                     nameCaptured = true;
                     conversationStarted = true;
 
                     return $"Welcome back {userName}! " +
-
                            memory.GetPersonalisedOpener() +
-
                            "ready to continue learning about cybersecurity?"
-
                            + GetMenu();
                 }
-
-                // ===================== NEW USER =====================
 
                 memory.UserName = userName;
                 memory.Store("UserName", userName);
@@ -112,9 +211,7 @@ namespace CybersecurityChatbot
                 return $"Hello {userName}! How are you today?";
             }
 
-            // ===================== STAGE 2 =====================
-            // User responds to "How are you?"
-
+            // Conversation Start
             if (askedHowAreYou && !conversationStarted)
             {
                 conversationStarted = true;
@@ -122,148 +219,71 @@ namespace CybersecurityChatbot
                 return emotionalResponse + GetMenu();
             }
 
-            // ===================== STORE FAVOURITE TOPIC =====================
+            // ===================== RANDOM TOPIC RESPONSES =====================
 
-            if (message.Contains("interested in"))
-            {
-                if (message.Contains("privacy"))
-                {
-                    memory.FavouriteTopic = "privacy";
-                    memory.Store("FavouriteTopic", "privacy");
-
-                    return $"Great choice {userName}! I will remember that you are interested in privacy."
-                           + GetMenu();
-                }
-
-                else if (message.Contains("phishing"))
-                {
-                    memory.FavouriteTopic = "phishing";
-                    memory.Store("FavouriteTopic", "phishing");
-
-                    return $"Great choice {userName}! I will remember that you are interested in phishing."
-                           + GetMenu();
-                }
-
-                else if (message.Contains("malware"))
-                {
-                    memory.FavouriteTopic = "malware";
-                    memory.Store("FavouriteTopic", "malware");
-
-                    return $"Great choice {userName}! I will remember that you are interested in malware."
-                           + GetMenu();
-                }
-
-                else if (message.Contains("vpn"))
-                {
-                    memory.FavouriteTopic = "VPNs";
-                    memory.Store("FavouriteTopic", "VPNs");
-
-                    return $"Great choice {userName}! I will remember that you are interested in VPNs."
-                           + GetMenu();
-                }
-            }
-
-            // ===================== CHATBOT RESPONSES =====================
-
-            // Greetings
-            if (message == "hello" ||
-                message == "hi" ||
-                message == "hey")
-            {
-                return $"Hello {userName}! How can I help you today?"
-                       + GetMenu();
-            }
-
-            // Cyber Security
-            else if (message.Contains("cyber security") ||
-                     message.Contains("cybersecurity"))
+            if (message.Contains("cyber security") ||
+                message.Contains("cybersecurity"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Cyber security is the practice of protecting computers, networks, and data from unauthorized access or attacks."
-
+                       GetRandomResponse("cybersecurity")
                        + GetMenu();
             }
 
-            // Phishing
             else if (message.Contains("phishing"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Phishing is a cyber attack that tricks people into revealing sensitive information like passwords or banking details."
-
+                       GetRandomResponse("phishing")
                        + GetMenu();
             }
 
-            // Malware
             else if (message.Contains("malware"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Malware is harmful software designed to damage or exploit devices and networks."
-
+                       GetRandomResponse("malware")
                        + GetMenu();
             }
 
-            // Ransomware
             else if (message.Contains("ransomware"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Ransomware encrypts files and demands payment to restore access."
-
+                       GetRandomResponse("ransomware")
                        + GetMenu();
             }
 
-            // Firewall
             else if (message.Contains("firewall"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "A firewall monitors and controls incoming and outgoing network traffic."
-
+                       GetRandomResponse("firewall")
                        + GetMenu();
             }
 
-            // VPN
             else if (message.Contains("vpn"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "A VPN creates a secure encrypted connection over the internet."
-
+                       GetRandomResponse("vpn")
                        + GetMenu();
             }
 
-            // Passwords
             else if (message.Contains("password"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "A strong password should include uppercase letters, lowercase letters, numbers, and symbols."
-
+                       GetRandomResponse("password")
                        + GetMenu();
             }
 
-            // Two-Factor Authentication
             else if (message.Contains("two-factor") ||
                      message.Contains("2fa"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Two-factor authentication adds extra security by requiring another verification step."
-
+                       GetRandomResponse("2fa")
                        + GetMenu();
             }
 
-            // Personal Data
             else if (message.Contains("privacy") ||
                      message.Contains("personal data"))
             {
                 return memory.GetPersonalisedOpener() +
-
-                       "Protect your personal data by avoiding suspicious links and using privacy settings."
-
+                       GetRandomResponse("privacy")
                        + GetMenu();
             }
 
