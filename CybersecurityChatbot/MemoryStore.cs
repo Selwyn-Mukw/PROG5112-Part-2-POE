@@ -6,10 +6,10 @@ namespace CybersecurityChatbot
 {
     public class MemoryStore
     {
-        // File path
+        // File path where the memory is stored
         private readonly string filePath = "memory.txt";
 
-        // User memory
+        // these are these are the values we want to store in memory and make sure that the bot will remember 
         public string UserName { get; set; }
 
         public string FavouriteTopic { get; set; }
@@ -116,7 +116,7 @@ namespace CybersecurityChatbot
             }
             catch
             {
-                // Ignore file errors
+                
             }
         }
     }

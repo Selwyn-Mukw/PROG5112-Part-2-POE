@@ -5,6 +5,8 @@ namespace CybersecurityChatbot
 {
     public class KeywordResponder
     {
+        // ===================== VARIABLES =====================
+
         // Store user's name
         private string userName;
 
@@ -12,6 +14,9 @@ namespace CybersecurityChatbot
         private bool nameCaptured = false;
         private bool askedHowAreYou = false;
         private bool conversationStarted = false;
+
+        // Count topic requests
+        private int topicCounter = 0;
 
         // Random object
         private Random random = new Random();
@@ -148,6 +153,19 @@ namespace CybersecurityChatbot
                    "Press 0 to exit the application.";
         }
 
+        // ===================== USER INTEREST METHOD =====================
+
+        private string CheckTopicInterest()
+        {
+            if (topicCounter >= 3)
+            {
+                return $"\n\n{userName}, you seem to really be enjoying cyber security!"
+                       + GetMenu();
+            }
+
+            return GetMenu();
+        }
+
         // ===================== CONSTRUCTOR =====================
 
         public KeywordResponder()
@@ -169,25 +187,29 @@ namespace CybersecurityChatbot
         {
             string message = userMessage.ToLower();
 
-            // Exit
+            // ===================== EXIT =====================
+
             if (message == "0")
             {
                 Environment.Exit(0);
             }
 
-            // Sentiment
+            // ===================== SENTIMENT =====================
+
             Sentiment sentiment = detector.Detect(message);
 
             string emotionalResponse =
                 detector.GetSentimentResponse(sentiment, userName);
 
-            // Capture Name
+            // ===================== CAPTURE NAME =====================
+
             if (!nameCaptured)
             {
                 userName = userMessage;
 
                 string savedName = memory.Recall("UserName");
 
+                // Returning user
                 if (!string.IsNullOrEmpty(savedName) &&
                     savedName.ToLower() == userName.ToLower())
                 {
@@ -202,6 +224,7 @@ namespace CybersecurityChatbot
                            + GetMenu();
                 }
 
+                // New user
                 memory.UserName = userName;
                 memory.Store("UserName", userName);
 
@@ -211,7 +234,8 @@ namespace CybersecurityChatbot
                 return $"Hello {userName}! How are you today?";
             }
 
-            // Conversation Start
+            // ===================== HOW ARE YOU =====================
+
             if (askedHowAreYou && !conversationStarted)
             {
                 conversationStarted = true;
@@ -219,89 +243,126 @@ namespace CybersecurityChatbot
                 return emotionalResponse + GetMenu();
             }
 
-            // ===================== RANDOM TOPIC RESPONSES =====================
+            // ===================== CYBER SECURITY =====================
 
             if (message.Contains("cyber security") ||
                 message.Contains("cybersecurity"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("cybersecurity")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== PHISHING =====================
 
             else if (message.Contains("phishing"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("phishing")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== MALWARE =====================
 
             else if (message.Contains("malware"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("malware")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== RANSOMWARE =====================
 
             else if (message.Contains("ransomware"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("ransomware")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== FIREWALL =====================
 
             else if (message.Contains("firewall"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("firewall")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== VPN =====================
 
             else if (message.Contains("vpn"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("vpn")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== PASSWORD =====================
 
             else if (message.Contains("password"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("password")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== 2FA =====================
 
             else if (message.Contains("two-factor") ||
                      message.Contains("2fa"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("2fa")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
+
+            // ===================== PRIVACY =====================
 
             else if (message.Contains("privacy") ||
                      message.Contains("personal data"))
             {
+                topicCounter++;
+
                 return memory.GetPersonalisedOpener() +
                        GetRandomResponse("privacy")
-                       + GetMenu();
+                       + CheckTopicInterest();
             }
 
-            // Thanks
+            // ===================== THANKS =====================
+
             else if (message.Contains("thank"))
             {
                 return $"You are welcome {userName}! Stay safe online."
                        + GetMenu();
             }
 
-            // Goodbye
+            // ===================== GOODBYE =====================
+
             else if (message.Contains("bye"))
             {
                 return $"Goodbye {userName}! Stay safe online."
                        + GetMenu();
             }
 
-            // Default
+            // ===================== DEFAULT =====================
+
             else
             {
                 return "Sorry, I don't understand that yet. Please ask a cybersecurity-related question."
