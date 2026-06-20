@@ -88,7 +88,7 @@ namespace CybersecurityChatbot
             switch (sentiment)
             {
                 case Sentiment.Worried:
-                    return $"I understand your concern {userName}. " +
+                    return $"I understand your concern,try not to worry yourself too much {userName} everything will be alright just hold on. " +
                            $"I am here to help you stay safe online.";
 
                 case Sentiment.Curious:

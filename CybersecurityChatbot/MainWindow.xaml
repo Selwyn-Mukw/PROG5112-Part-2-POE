@@ -45,7 +45,7 @@
             </Border>
 
             <!-- BOT TITLE -->
-            <TextBlock Text=" [=====================]  |  ORI THE CYBER BOT  |  [=====================]"
+            <TextBlock Text=" [*********************]  |  ORI THE CYBER BOT  |  [*********************]"
                        FontFamily="Consolas"
                        Foreground="White"
                        FontSize="16"
