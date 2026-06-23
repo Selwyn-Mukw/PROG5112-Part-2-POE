@@ -1,12 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace CybersecurityChatbot
 {
-    internal class ActivityLogger
+    public static class ActivityLogger
     {
+        private const string LogFile = "activity.log";
+
+        public static void Log(string message)
+        {
+            File.AppendAllText(
+                LogFile,
+                $"{DateTime.Now}: {message}\n");
+        }
     }
 }
