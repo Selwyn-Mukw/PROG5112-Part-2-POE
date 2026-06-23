@@ -1,122 +1,201 @@
-﻿<Window x:Class="CybersecurityChatbot.MainWindow"
+﻿        <Window x:Class="CybersecurityChatbot.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Cybersecurity Chatbot"
         Height="1000"
-        Width="1200"
-        MinWidth="1200"
+        Width="1400"
+        MinWidth="1400"
         Background="#1E1E1E">
 
     <Grid Margin="10">
 
-        <!-- ROWS -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <!-- MAIN COLUMNS -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- ================= HEADER ================= -->
-        <StackPanel Grid.Row="0">
+        <!-- ================= CHATBOT SECTION ================= -->
+        <Grid Grid.Column="0">
 
-            <!-- ASCII LOGO -->
-            <Border Background="#111111"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ================= HEADER ================= -->
+            <StackPanel Grid.Row="0">
+
+                <!-- ASCII LOGO -->
+                <Border Background="#111111"
+                        CornerRadius="10"
+                        Padding="15"
+                        BorderBrush="Lime"
+                        BorderThickness="1"
+                        Margin="0,0,0,10">
+
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled">
+
+                        <TextBox x:Name="AsciiArt"
+                                 FontFamily="Consolas"
+                                 FontSize="7"
+                                 Foreground="Lime"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 IsReadOnly="True"
+                                 IsTabStop="False"
+                                 TextWrapping="NoWrap"
+                                 AcceptsReturn="True"
+                                 HorizontalAlignment="Center"/>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- BOT TITLE -->
+                <TextBlock Text=" [*********************]  |  ORI THE CYBER BOT  |  [*********************]"
+                           FontFamily="Consolas"
+                           Foreground="White"
+                           FontSize="16"
+                           TextAlignment="Center"
+                           Margin="0,5,0,10"/>
+            </StackPanel>
+
+            <!-- ================= CHAT HISTORY ================= -->
+            <Border Grid.Row="1"
+                    Background="#252526"
                     CornerRadius="10"
-                    Padding="15"
+                    Padding="10"
+                    Margin="0,10,0,10"
                     BorderBrush="Lime"
-                    BorderThickness="1"
-                    Margin="0,0,0,10">
+                    BorderThickness="1">
 
-                <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Disabled">
-
-                    <TextBox x:Name="AsciiArt"
+                <RichTextBox x:Name="ChatHistory"
+                             Background="#252526"
+                             Foreground="White"
                              FontFamily="Consolas"
-                             FontSize="7"
-                             Foreground="Lime"
+                             FontSize="15"
+                             IsReadOnly="True"
+                             BorderThickness="0"
+                             VerticalScrollBarVisibility="Auto"/>
+            </Border>
+
+            <!-- ================= INPUT AREA ================= -->
+            <Grid Grid.Row="2"
+                  Margin="0,5,0,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="140"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Background="#3C3C3C"
+                        CornerRadius="8"
+                        BorderBrush="Lime"
+                        BorderThickness="1"
+                        Margin="0,0,10,0">
+
+                    <TextBox x:Name="UserInput"
+                             FontSize="16"
+                             FontFamily="Consolas"
+                             Foreground="White"
                              Background="Transparent"
                              BorderThickness="0"
-                             IsReadOnly="True"
-                             IsTabStop="False"
-                             TextWrapping="NoWrap"
-                             AcceptsReturn="True"
-                             HorizontalAlignment="Center"/>
-                </ScrollViewer>
-            </Border>
+                             Padding="10"
+                             CaretBrush="Lime"
+                             VerticalContentAlignment="Center"
+                             Height="45"/>
+                </Border>
 
-            <!-- BOT TITLE -->
-            <TextBlock Text=" [*********************]  |  ORI THE CYBER BOT  |  [*********************]"
-                       FontFamily="Consolas"
-                       Foreground="White"
-                       FontSize="16"
-                       TextAlignment="Center"
-                       Margin="0,5,0,10"/>
-        </StackPanel>
+                <Button x:Name="SendButton"
+                        Grid.Column="1"
+                        Content="SEND"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        FontFamily="Consolas"
+                        Background="Lime"
+                        Foreground="Black"
+                        BorderThickness="0"
+                        Height="45"
+                        Cursor="Hand"
+                        Click="SendButton_Click"/>
+            </Grid>
 
-        <!-- ================= CHAT HISTORY AREA ================= -->
-        <Border Grid.Row="1"
-                Background="#252526"
-                CornerRadius="10"
-                Padding="10"
-                Margin="0,10,0,10"
-                BorderBrush="Lime"
-                BorderThickness="1">
-
-            <!-- Scrollable Read-Only Chat Area -->
-            <RichTextBox x:Name="ChatHistory"
-                         Background="#252526"
-                         Foreground="White"
-                         FontFamily="Consolas"
-                         FontSize="15"
-                         IsReadOnly="True"
-                         BorderThickness="0"
-                         VerticalScrollBarVisibility="Auto"/>
-        </Border>
-
-        <!-- ================= INPUT AREA ================= -->
-        <Grid Grid.Row="2"
-              Margin="0,5,0,0">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="140"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- USER INPUT -->
-            <Border Grid.Column="0"
-                    Background="#3C3C3C"
-                    CornerRadius="8"
-                    BorderBrush="Lime"
-                    BorderThickness="1"
-                    Margin="0,0,10,0">
-
-                <TextBox x:Name="UserInput"
-                         FontSize="16"
-                         FontFamily="Consolas"
-                         Foreground="White"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Padding="10"
-                         CaretBrush="Lime"
-                         VerticalContentAlignment="Center"
-                         Height="45"/>
-            </Border>
-
-            <!-- SEND BUTTON -->
-            <Button x:Name="SendButton"
-                    Grid.Column="1"
-                    Content="SEND"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    FontFamily="Consolas"
-                    Background="Lime"
-                    Foreground="Black"
-                    BorderThickness="0"
-                    Height="45"
-                    Cursor="Hand"
-                    Click="SendButton_Click"/>
         </Grid>
 
+        <!-- ================= TASK ASSISTANT ================= -->
+        <GroupBox Grid.Column="1"
+                  Header="TASK ASSISTANT"
+                  Margin="10,0,0,0"
+                  Foreground="White"
+                  FontFamily="Consolas"
+                  BorderBrush="Lime"
+                  BorderThickness="1">
+
+            <StackPanel Margin="10">
+
+                <TextBlock Text="Task Title"
+                           Foreground="White"
+                           Margin="0,0,0,5"/>
+
+                <TextBox x:Name="txtTaskTitle"
+                         Height="35"
+                         Margin="0,0,0,10"/>
+
+                <TextBlock Text="Task Description"
+                           Foreground="White"
+                           Margin="0,0,0,5"/>
+
+                <TextBox x:Name="txtTaskDescription"
+                         Height="80"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Margin="0,0,0,10"/>
+
+                <TextBlock Text="Reminder"
+                           Foreground="White"
+                           Margin="0,0,0,5"/>
+
+                <TextBox x:Name="txtReminder"
+                         Height="35"
+                         Margin="0,0,0,10"
+                         Text="Remind me in 7 days"/>
+
+                <Button x:Name="btnAddTask"
+                        Content="ADD TASK"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        Background="Lime"
+                        Foreground="Black"
+                        FontWeight="Bold"
+                        Click="btnAddTask_Click"/>
+
+                <TextBlock Text="Current Tasks"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="0,10,0,5"/>
+
+                <ListBox x:Name="lstTasks"
+                         Height="400"
+                         Margin="0,0,0,10"/>
+
+                <Button x:Name="btnComplete"
+                        Content="MARK COMPLETE"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        Click="btnComplete_Click"/>
+
+                <Button x:Name="btnDelete"
+                        Content="DELETE TASK"
+                        Height="40"
+                        Click="btnDelete_Click"/>
+
+            </StackPanel>
+
+        </GroupBox>
+
     </Grid>
- 
+
 </Window>
+
