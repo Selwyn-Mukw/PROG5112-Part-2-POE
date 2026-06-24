@@ -63,6 +63,7 @@ namespace CybersecurityChatbot
                 welcomeParagraph);
 
             LoadTasks();
+            LoadQuestion();
         }
 
         private void SendButton_Click(
@@ -181,16 +182,12 @@ namespace CybersecurityChatbot
             object sender,
             RoutedEventArgs e)
         {
-            if (lstTasks.SelectedItem
-                is CyberTask task)
+            if (lstTasks.SelectedItem is CyberTask task)
             {
-                taskManager.DeleteTask(
-                    task.Id);
-
+                taskManager.DeleteTask(task.Id);
                 LoadTasks();
-
                 MessageBox.Show(
-                    "Task deleted.");
+                    "Task deleted successfully.");
             }
             else
             {
@@ -198,6 +195,87 @@ namespace CybersecurityChatbot
                     "Please select a task.");
             }
         }
+
+        
+       private QuizManager quizManager = new QuizManager();
+
+        private void LoadQuestion()
+        {
+            if (quizManager.IsFinished())
+            {
+                txtQuestion.Text =
+                $"Quiz Finished!\nScore: {quizManager.GetScore()} / {quizManager.TotalQuestions()}";
+
+
+    lstOptions.ItemsSource = null;
+
+                txtFeedback.Text =
+                    quizManager.GetScore() >= (quizManager.TotalQuestions() / 2)
+                    ? "Great job!"
+                    : "Keep learning and try again!";
+
+                return;
+            }
+
+            QuizQuestion question =
+                quizManager.GetCurrentQuestion();
+
+            if (question == null)
+            {
+                txtQuestion.Text = "No questions available.";
+                return;
+            }
+
+            txtQuestion.Text = question.Question;
+
+            lstOptions.ItemsSource = null;
+            lstOptions.ItemsSource = question.Options;
+
+            txtFeedback.Text = "";
+
+            txtScore.Text =
+                $"Score: {quizManager.GetScore()} / {quizManager.TotalQuestions()}";
+
+
+}
+
+
+        private void btnSubmitAnswer_Click(
+    object sender,
+    RoutedEventArgs e)
+        {
+            if (lstOptions.SelectedItem == null)
+            {
+                MessageBox.Show("Please select an answer.");
+                return;
+            }
+
+            string selectedAnswer =
+                lstOptions.SelectedItem.ToString();
+
+            QuizQuestion currentQuestion =
+                quizManager.GetCurrentQuestion();
+
+            bool correct =
+                quizManager.SubmitAnswer(selectedAnswer);
+
+            txtFeedback.Text =
+                correct
+                ? "✓ Correct! " + currentQuestion.Explanation
+                : "✗ Incorrect! " + currentQuestion.Explanation;
+
+            txtScore.Text =
+                $"Score: {quizManager.GetScore()} / {quizManager.TotalQuestions()}";
+
+            quizManager.MoveNextQuestion();
+            LoadQuestion();
+        }
+
+      
+
     }
 }
+
+
+
 
