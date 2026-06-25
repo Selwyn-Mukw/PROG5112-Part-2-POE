@@ -11,6 +11,8 @@ namespace CybersecurityChatbot
     {
         private KeywordResponder responder;
         private TaskManager taskManager = new TaskManager();
+        private QuizManager quizManager = new QuizManager();
+        private IntentDetector intentDetector = new IntentDetector();
 
         public MainWindow()
         {
@@ -32,6 +34,7 @@ namespace CybersecurityChatbot
                 MessageBox.Show(
                     "Sound could not play: " + ex.Message);
             }
+
 
             AsciiArt.Text =
 @"███████╗ █████╗ ███████╗███████╗████████╗██╗   ██╗
@@ -64,6 +67,7 @@ namespace CybersecurityChatbot
 
             LoadTasks();
             LoadQuestion();
+            
         }
 
         private void SendButton_Click(
@@ -72,6 +76,8 @@ namespace CybersecurityChatbot
         {
             string userMessage =
                 UserInput.Text.Trim();
+            string intent =
+    intentDetector.DetectIntent(userMessage);
 
             if (string.IsNullOrWhiteSpace(
                 userMessage))
@@ -93,26 +99,53 @@ namespace CybersecurityChatbot
             ChatHistory.Document.Blocks.Add(
                 userParagraph);
 
+            switch (intent)
+            {
+                case "Quiz":
+
+                    quizManager.ResetQuiz();
+                    LoadQuestion();
+
+                    AddBotMessage("Starting the Cybersecurity Quiz!");
+                    return;
+
+                case "AddTask":
+
+                    string taskTitle = ExtractTaskTitle(userMessage);
+
+                    taskManager.AddTask(
+                        taskTitle,
+                        "",
+                        "");
+
+                    LoadTasks();
+
+                    AddBotMessage($"Task added: {taskTitle}");
+
+                    return;
+
+                case "Reminder":
+
+                    string reminderTask = ExtractReminder(userMessage);
+
+                    taskManager.AddTask(
+                        reminderTask,
+                        "",
+                        "Reminder");
+
+                    LoadTasks();
+
+                    AddBotMessage(
+                        $"Reminder set for  '{reminderTask}'.");
+
+                    return;
+            }
             // BOT RESPONSE
 
             string botResponse =
-                responder.GetResponse(
-                    userMessage);
+    responder.GetResponse(userMessage);
 
-            Paragraph botParagraph =
-                new Paragraph();
-
-            botParagraph.Foreground =
-                Brushes.White;
-
-            botParagraph.Inlines.Add(
-                new Run(
-                    "Bot: " + botResponse));
-
-            ChatHistory.Document.Blocks.Add(
-                botParagraph);
-
-            ChatHistory.ScrollToEnd();
+            AddBotMessage(botResponse);
 
             UserInput.Clear();
         }
@@ -197,7 +230,7 @@ namespace CybersecurityChatbot
         }
 
         
-       private QuizManager quizManager = new QuizManager();
+       
 
         private void LoadQuestion()
         {
@@ -232,6 +265,7 @@ namespace CybersecurityChatbot
             lstOptions.ItemsSource = question.Options;
 
             txtFeedback.Text = "";
+            
 
             txtScore.Text =
                 $"Score: {quizManager.GetScore()} / {quizManager.TotalQuestions()}";
@@ -250,11 +284,13 @@ namespace CybersecurityChatbot
                 return;
             }
 
-            string selectedAnswer =
-                lstOptions.SelectedItem.ToString();
+            string selectedAnswer = lstOptions.SelectedItem.ToString();
 
             QuizQuestion currentQuestion =
                 quizManager.GetCurrentQuestion();
+
+            if (currentQuestion == null)
+                return;
 
             bool correct =
                 quizManager.SubmitAnswer(selectedAnswer);
@@ -271,7 +307,47 @@ namespace CybersecurityChatbot
             LoadQuestion();
         }
 
-      
+        
+        private void AddBotMessage(string message)
+        {
+            Paragraph botParagraph = new Paragraph();
+
+            botParagraph.Foreground = Brushes.White;
+
+            botParagraph.Inlines.Add(
+                new Run("Bot: " + message));
+
+            ChatHistory.Document.Blocks.Add(botParagraph);
+
+            ChatHistory.ScrollToEnd();
+        }
+        private string ExtractTaskTitle(string input)
+        {
+            input = input.ToLower();
+
+            input = input.Replace("add task", "");
+            input = input.Replace("add a task", "");
+            input = input.Replace("create task", "");
+            input = input.Replace("create a task", "");
+            input = input.Replace("i need to", "");
+            input = input.Replace("enable", "");
+            input = input.Replace("set up", "");
+
+            return input.Trim();
+        }
+
+        private string ExtractReminder(string input)
+        {
+            input = input.ToLower();
+
+            input = input.Replace("remind me to", "");
+            input = input.Replace("remind me", "");
+            input = input.Replace("set a reminder to", "");
+            input = input.Replace("set reminder to", "");
+            input = input.Replace("remember to", "");
+
+            return input.Trim();
+        }
 
     }
 }
