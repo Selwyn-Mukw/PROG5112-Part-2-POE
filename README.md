@@ -127,6 +127,7 @@ This project demonstrates:
 
 Part 3 successfully implements an intelligent cybersecurity chatbot featuring task management, reminders, quiz functionality, activity logging, persistent storage, and NLP-based intent recognition, providing users with an engaging cybersecurity learning experience.
 
+here is a link to my youtube video https://youtu.be/gMWKY2o-7w8
 
 <img width="1920" height="1080" alt="Screenshot 2026-06-25 220413" src="https://github.com/user-attachments/assets/cb0e5b39-8e77-41ac-8b3c-ceeaa21e3e02" />
 <img width="1920" height="1080" alt="Screenshot 2026-06-25 220603" src="https://github.com/user-attachments/assets/4ba3c3a2-e581-4d41-96f5-c4e4f316cc18" />
