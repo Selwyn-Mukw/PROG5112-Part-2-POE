@@ -10,7 +10,124 @@ List of items that were implemented in Part 2
 This bot runs based on the inputs of the user whereby the user will enter their name and describe how they are feeling.once user describes there feeling the bot will responnd based on what the user inputs .This bot will drop a list of all the topics which have a list of different meaning which will be randomly generated based on whta the user chooses.The user can choose differenty topics after 33 topic sthe bot will remmebr the users name and mention that they are really interested in cyber security.The user can end the program by pressing 0 which will kill the program.if the user logs back in the bot will remember the name as soon as the user inputs it.
 MemoryStore.cs: this will store the memory and will be able to rewcall the users name should they type it after ending the session the bot will welcome the user back
 
-here is my youtube link https://youtu.be/9t5xPtWagkY
-<img width="1907" height="557" alt="Screenshot 2026-05-27 195130" src="https://github.com/user-attachments/assets/94d29bb3-7f57-437d-a74c-06b1456bbcda" />
-<img width="1905" height="1006" alt="Bot remembers user name " src="https://github.com/user-attachments/assets/c535e346-7371-4047-a978-5c609ac7943b" />
-<img width="1903" height="608" alt="image" src="https://github.com/user-attachments/assets/cd9fb871-4454-48ce-a6e0-a244679040cc" />
+Part3 
+# Cybersecurity Chatbot – Part 3
+
+## Project Overview
+
+This project is a C# WPF Cybersecurity Chatbot developed as part of my Software Development coursework. The application provides users with cybersecurity guidance while incorporating task management, reminders, quizzes, natural language processing (NLP), and activity logging to create a more interactive and intelligent user experience.
+
+## Features Implemented
+
+### Cybersecurity Chatbot
+
+* Interactive chatbot with a graphical WPF interface.
+* Cybersecurity-themed UI with ASCII banner and welcome sound.
+* Keyword-based cybersecurity assistance and responses.
+* Rich chat history display.
+
+### Task Assistant
+
+* Add new cybersecurity-related tasks.
+* Mark tasks as complete.
+* Delete tasks.
+* Display current tasks.
+* Persistent task storage using local file storage.
+* Tasks include a title, description, reminder, completion status, and unique ID.
+
+### Cybersecurity Quiz
+
+* Interactive cybersecurity quiz system.
+* Multiple-choice and True/False questions.
+* Automatic answer validation.
+* Real-time score tracking.
+* Explanations for correct and incorrect answers.
+* Quiz completion summary.
+* Support for multiple cybersecurity questions.
+
+### Natural Language Processing (NLP)
+
+The chatbot recognises user intent instead of relying solely on exact keywords.
+
+Supported intents include:
+
+* Start a cybersecurity quiz.
+* Create new tasks.
+* Set reminders.
+* Display activity logs.
+
+Example user commands include:
+
+* "Start quiz"
+* "Quiz me"
+* "Add task"
+* "Create a task"
+* "Remind me to update my password"
+* "Don't forget to backup my files"
+* "Show activity log"
+
+### Reminder System
+
+* Extracts reminder information from natural language.
+* Automatically creates reminder tasks.
+* Confirms reminder creation to the user.
+
+### Activity Logger
+
+The chatbot records important user activities including:
+
+* Quiz started.
+* Quiz completed.
+* Task added.
+* Task completed.
+* Task deleted.
+* Reminder created.
+
+Users can request their recent activity log through natural language.
+
+### Data Persistence
+
+* Tasks are automatically saved.
+* Tasks are reloaded when the application starts.
+* User progress is maintained between sessions.
+
+### User Interface
+
+* Modern cybersecurity-themed design.
+* Dedicated chatbot panel.
+* Integrated quiz section.
+* Task management panel.
+* Improved layout using WPF Grid controls.
+* Rich text conversation display.
+
+## Technologies Used
+
+* C#
+* Windows Presentation Foundation (WPF)
+* .NET
+* Object-Oriented Programming (OOP)
+* JSON/File Storage
+* Git & GitHub
+* GitHub Actions
+
+## Key Learning Outcomes
+
+This project demonstrates:
+
+* Object-Oriented Programming principles.
+* Event-driven programming.
+* GUI development with WPF.
+* File handling and data persistence.
+* Basic Natural Language Processing (NLP).
+* Task and reminder management.
+* Activity logging.
+* Git version control and GitHub collaboration.
+
+## Project Status
+
+Part 3 successfully implements an intelligent cybersecurity chatbot featuring task management, reminders, quiz functionality, activity logging, persistent storage, and NLP-based intent recognition, providing users with an engaging cybersecurity learning experience.
+
+
+<img width="1920" height="1080" alt="Screenshot 2026-06-25 220413" src="https://github.com/user-attachments/assets/cb0e5b39-8e77-41ac-8b3c-ceeaa21e3e02" />
+<img width="1920" height="1080" alt="Screenshot 2026-06-25 220603" src="https://github.com/user-attachments/assets/4ba3c3a2-e581-4d41-96f5-c4e4f316cc18" />
+
